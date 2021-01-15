@@ -13,8 +13,8 @@ public class MinestomCommandRegistrationHandler<C> implements CommandRegistratio
 
     private MinestomCommandManager<C> commandManager;
 
-    void initialize(final @NotNull MinestomCommandManager<C> cloudburstCommandManager) {
-        this.commandManager = cloudburstCommandManager;
+    void initialize(final @NotNull MinestomCommandManager<C> commandManager) {
+        this.commandManager = commandManager;
     }
 
     @Override

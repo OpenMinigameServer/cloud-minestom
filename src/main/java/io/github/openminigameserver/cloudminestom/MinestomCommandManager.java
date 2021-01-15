@@ -4,6 +4,7 @@ import cloud.commandframework.CommandManager;
 import cloud.commandframework.CommandTree;
 import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
+import cloud.commandframework.internal.CommandRegistrationHandler;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.meta.SimpleCommandMeta;
 import io.github.openminigameserver.cloudminestom.caption.MinestomCaptionRegistry;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Function;
 
 /**
- * Command manager for the Cloudburst platform
+ * Command manager for the Minestom platform
  *
  * @param <C> Command sender type
  */
@@ -25,16 +26,6 @@ public class MinestomCommandManager<C> extends CommandManager<C> {
     private final Function<CommandSender, C> commandSenderMapper;
     @NotNull
     private final Function<C, CommandSender> backwardsCommandSenderMapper;
-
-    @NotNull
-    public C mapCommandSender(CommandSender sender) {
-        return commandSenderMapper.apply(sender);
-    }
-
-    @NotNull
-    public CommandSender backwardsMapCommandSender(C sender) {
-        return backwardsCommandSenderMapper.apply(sender);
-    }
 
     /**
      * Create a new command manager instance
@@ -58,6 +49,9 @@ public class MinestomCommandManager<C> extends CommandManager<C> {
                                      final @NotNull Function<CommandSender, C> commandSenderMapper,
                                      final @NotNull Function<C, CommandSender> backwardsCommandSenderMapper) {
         super(commandExecutionCoordinator, new MinestomCommandRegistrationHandler<>());
+        CommandRegistrationHandler registrationHandler = getCommandRegistrationHandler();
+        if (registrationHandler instanceof MinestomCommandRegistrationHandler)
+            ((MinestomCommandRegistrationHandler<C>) registrationHandler).initialize(this);
         this.commandSenderMapper = commandSenderMapper;
         this.backwardsCommandSenderMapper = backwardsCommandSenderMapper;
 
@@ -66,6 +60,16 @@ public class MinestomCommandManager<C> extends CommandManager<C> {
                 new PlayerArgument.PlayerParser<>());
 
         this.setCaptionRegistry(new MinestomCaptionRegistry<>());
+    }
+
+    @NotNull
+    public C mapCommandSender(CommandSender sender) {
+        return commandSenderMapper.apply(sender);
+    }
+
+    @NotNull
+    public CommandSender backwardsMapCommandSender(C sender) {
+        return backwardsCommandSenderMapper.apply(sender);
     }
 
     @Override
