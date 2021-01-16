@@ -3,6 +3,7 @@ package io.github.openminigameserver.cloudminestom;
 import cloud.commandframework.exceptions.*;
 import kotlin.collections.ArraysKt;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.chat.ChatColor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
@@ -23,10 +24,11 @@ import static io.github.openminigameserver.cloudminestom.CloudInteropHelper.remo
 
 public class MinestomCloudCommand<C> extends Command {
 
-    private static final String MESSAGE_INTERNAL_ERROR = "An internal error occurred while attempting to perform this" +
+    private static final String MESSAGE_INTERNAL_ERROR = ChatColor.RED
+            + "An internal error occurred while attempting to perform this" +
             " command.";
     private static final String MESSAGE_NO_PERMS =
-            "I'm sorry, but you do not have permission to perform this command. "
+            ChatColor.RED + "I'm sorry, but you do not have permission to perform this command. "
                     + "Please contact the server administrators if you believe that this is in error.";
     private static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command. Type \"/help\" for help.";
 
@@ -115,9 +117,9 @@ public class MinestomCloudCommand<C> extends Command {
                                     InvalidSyntaxException.class,
                                     (InvalidSyntaxException) throwable, (c, e) ->
                                             commandSender.sendMessage(
-                                                    "Invalid Command Syntax. "
+                                                    ChatColor.RED + "Invalid Command Syntax. "
                                                             + "Correct command syntax is: "
-                                                            + "/"
+                                                            + ChatColor.GRAY + "/"
                                                             + ((InvalidSyntaxException) finalThrowable)
                                                             .getCorrectSyntax())
                             );
@@ -144,8 +146,8 @@ public class MinestomCloudCommand<C> extends Command {
                                     ArgumentParseException.class,
                                     (ArgumentParseException) throwable, (c, e) ->
                                             commandSender.sendMessage(
-                                                    "Invalid Command Argument: "
-                                                            + finalThrowable.getCause().getMessage())
+                                                    ChatColor.RED + "Invalid Command Argument: "
+                                                            + ChatColor.GRAY + finalThrowable.getCause().getMessage())
                             );
                         } else if (throwable instanceof CommandExecutionException) {
                             this.manager.handleException(sender,

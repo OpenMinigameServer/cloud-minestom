@@ -5,7 +5,7 @@ plugins {
 }
 
 val minestomVersion = "238ea649ab"
-val cloudVersion = "1.3.0"
+val cloudVersion = "1.4.0"
 
 group = "io.github.openminigameserver"
 //Use the same version as cloud
